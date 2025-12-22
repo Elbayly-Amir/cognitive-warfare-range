@@ -1,0 +1,98 @@
+version: '3'
+
+services:
+  # 1. LA BASE DE DONNÉES (ElasticSearch)
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g" # Limite la RAM à 1Go pour ne pas tuer ton PC
+    ports:
+      - "9200:9200"
+
+  # 2. LA MÉMOIRE CACHE (Redis)
+  redis:
+    image: redis:7.2.3
+    restart: always
+
+  # 3. LE STOCKAGE DE FICHIERS (MinIO)
+  minio:
+    image: minio/minio:RELEASE.2023-11-20T22-40-07Z
+    volumes:
+      - s3data:/data
+    ports:
+      - "9000:9000"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  # 4. LE MESSAGE BROKER (RabbitMQ)
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  # 5. LA PLATEFORME OPENCTI (Le Cerveau)
+  opencti:
+    image: opencti/platform:6.3.10
+    environment:
+      - APP__PORT=8080
+      - APP__BASE_URL=${OPENCTI_BASE_URL}
+      - APP__ADMIN__EMAIL=${OPENCTI_ADMIN_EMAIL}
+      - APP__ADMIN__PASSWORD=${OPENCTI_ADMIN_PASSWORD}
+      - APP__ADMIN__TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - REDIS__HOSTNAME=redis
+      - REDIS__PORT=6379
+      - ELASTICSEARCH__URL=http://elasticsearch:9200
+      - MINIO__ENDPOINT=minio
+      - MINIO__PORT=9000
+      - MINIO__USE_SSL=false
+      - MINIO__ACCESS_KEY=${MINIO_ROOT_USER}
+      - MINIO__SECRET_KEY=${MINIO_ROOT_PASSWORD}
+      - RABBITMQ__HOSTNAME=rabbitmq
+      - RABBITMQ__PORT=5672
+      - RABBITMQ__USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ__PASSWORD=${RABBITMQ_DEFAULT_PASS}
+      - PROVIDERS__LOCAL__STRATEGY=LocalStrategy
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+      - elasticsearch
+      - minio
+      - rabbitmq
+
+  # 6. LE WORKER (L'ouvrier qui traite les tâches de fond)
+  worker:
+    image: opencti/worker:6.3.10
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - WORKER_LOG_LEVEL=info
+    depends_on:
+      - opencti
+  
+  connector:
+    build: .  # Construit l'image à partir du Dockerfile dans le dossier courant
+    environment:
+      - OPENCTI_URL=http://opencti:8080  # Ici, "opencti" fonctionnera à 100%
+      - OPENCTI_TOKEN=${OPENCTI_TOKEN}
+    depends_on:
+      - opencti
+
+volumes:
+  esdata:
+  s3data:

@@ -1,0 +1,5 @@
+pydantic
+pytest
+faker
+pydantic-settings
+pycti==6.3.10
