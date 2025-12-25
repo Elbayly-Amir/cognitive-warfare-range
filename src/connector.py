@@ -14,9 +14,8 @@ class OpenCTIConnector:
 
         print(f"[Wait] Tentative de connexion à {self.api_url}...")
         
-        for i in range(30): # 30 tentatives
+        for i in range(30):
             try:
-                # On tente d'initialiser le client
                 self.api = OpenCTIApiClient(
                     url=self.api_url,
                     token=self.api_token,
@@ -44,26 +43,56 @@ class OpenCTIConnector:
             create_indicator=False
         )
 
+        
+    def _analyze_content(self, content: str) -> list[str]:
+        """Détecte des mots clés et retourne des labels"""
+        labels = ["SIMULATION"]
+        
+        content_lower = content.lower()
+        
+        if any(word in content_lower for word in ["fake", "complot", "secret", "truth" ]):
+            labels.append("DISINFORMATION")
+        if any(word in content_lower for word in ["urgent", "click here", "act now", "limited time"]):
+            labels.append("SCAM")
+        if any(word in content_lower for word in ["attack", "hacked", "leak", "password"]):
+            labels.append("SECURITY_INCIDENT")
+
+        return labels
+
     def send_post(self, post: SocialMediaPost):
-        """Transforme notre Post en objet STIX et l'envoie"""
         print(f"[>>] Envoi du post de {post.author.pseudo} vers OpenCTI...")
 
         try:
+            detected_labels = self._analyze_content(post.content)
+            
+            for label_name in detected_labels:
+                color = "#ff0000" if label_name in ["DISINFORMATION", "SECURITY_INCIDENT"] else "#00bfff"
+                try:
+                    self.api.label.create(value=label_name, color=color)
+                except Exception:
+                    pass 
+
             author_stix = self._create_identity(
                 author_name=post.author.pseudo,
-                description=f"Bot suspect détecté. Score réputation: {post.author.reputation_score}/100"
+                description=f"Bot suspect. Reputation: {post.author.reputation_score}"
             )
 
             note = self.api.note.create(
-                abstract=f"Post Social Media sur {post.platform}",
+                abstract=f"Post sur {post.platform}",
                 content=post.content,
                 created=post.created_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
                 createdBy=author_stix["id"],
                 confidence=80
             )
             
-            print(f"   [V] Succès ! Note créée avec ID: {note['id']}")
+            for label in detected_labels:
+                self.api.stix_domain_object.add_label(
+                    id=note["id"], 
+                    label_name=label
+                )
+
+            print(f"   [V] Succès ! Note {note['id']} taguée avec : {detected_labels}")
             return note
 
         except Exception as e:
-            print(f"   [X] Erreur lors de l'envoi : {e}")
+            print(f"   [X] Erreur : {e}")

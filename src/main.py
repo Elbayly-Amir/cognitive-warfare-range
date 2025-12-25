@@ -8,7 +8,7 @@ def main():
     print("--- DÉMARRAGE DU CONNECTEUR SOCIAL ENGINEERING ---")
     
     masked_token = settings.opencti_token[:4] + "****"
-    print(f"Cible : {settings.opencti_url}")
+    print(f"Cible : {settings.opencti_url} avec le token {masked_token}")
     
     try:
         connector = OpenCTIConnector()

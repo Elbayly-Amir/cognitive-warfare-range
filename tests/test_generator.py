@@ -12,4 +12,4 @@ def test_generator_output_types():
     first_post = posts[0]
     assert isinstance(first_post, SocialMediaPost)    
     assert len(first_post.content) > 0
-    assert first_post.author.pseudo.startswith("@") # Convention qu'on va imposer
+    assert first_post.author.pseudo.startswith("@")

@@ -1,7 +1,6 @@
 version: '3'
 
 services:
-  # 1. LA BASE DE DONNÉES (ElasticSearch)
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
     volumes:
@@ -9,16 +8,20 @@ services:
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
-      - "ES_JAVA_OPTS=-Xms1g -Xmx1g" # Limite la RAM à 1Go pour ne pas tuer ton PC
+      - "ES_JAVA_OPTS=-Xms4g -Xmx4g"
     ports:
       - "9200:9200"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cat/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
-  # 2. LA MÉMOIRE CACHE (Redis)
   redis:
     image: redis:7.2.3
     restart: always
 
-  # 3. LE STOCKAGE DE FICHIERS (MinIO)
   minio:
     image: minio/minio:RELEASE.2023-11-20T22-40-07Z
     volumes:
@@ -35,7 +38,6 @@ services:
       timeout: 20s
       retries: 3
 
-  # 4. LE MESSAGE BROKER (RabbitMQ)
   rabbitmq:
     image: rabbitmq:3.12-management
     environment:
@@ -45,7 +47,6 @@ services:
       - "5672:5672"
       - "15672:15672"
 
-  # 5. LA PLATEFORME OPENCTI (Le Cerveau)
   opencti:
     image: opencti/platform:6.3.10
     environment:
@@ -67,15 +68,19 @@ services:
       - RABBITMQ__USER=${RABBITMQ_DEFAULT_USER}
       - RABBITMQ__PASSWORD=${RABBITMQ_DEFAULT_PASS}
       - PROVIDERS__LOCAL__STRATEGY=LocalStrategy
+      - SEARCH__ENGINE=elasticsearch
     ports:
       - "8080:8080"
     depends_on:
-      - redis
-      - elasticsearch
-      - minio
-      - rabbitmq
+      redis:
+        condition: service_started
+      minio:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+      elasticsearch:
+        condition: service_healthy
 
-  # 6. LE WORKER (L'ouvrier qui traite les tâches de fond)
   worker:
     image: opencti/worker:6.3.10
     environment:
@@ -86,12 +91,13 @@ services:
       - opencti
   
   connector:
-    build: .  # Construit l'image à partir du Dockerfile dans le dossier courant
+    build: .
     environment:
-      - OPENCTI_URL=http://opencti:8080  # Ici, "opencti" fonctionnera à 100%
+      - OPENCTI_URL=http://opencti:8080
       - OPENCTI_TOKEN=${OPENCTI_TOKEN}
     depends_on:
-      - opencti
+      opencti:
+        condition: service_started
 
 volumes:
   esdata:
