@@ -1,0 +1,26 @@
+[
+  {
+    "name": "SIMULATION",
+    "color": "#00bfff",
+    "description": "Donnée générée artificiellement",
+    "keywords": []
+  },
+  {
+    "name": "DISINFORMATION",
+    "color": "#ff0000",
+    "description": "Contenu complotiste ou fausses nouvelles",
+    "keywords": ["fake", "complot", "truth", "secret", "cover-up"]
+  },
+  {
+    "name": "SECURITY_INCIDENT",
+    "color": "#ff4500",
+    "description": "Indicateurs de compromission ou hacks",
+    "keywords": ["hacked", "leak", "password", "breach", "malware"]
+  },
+  {
+    "name": "PHISHING",
+    "color": "#ffa500",
+    "description": "Tentative d'hameçonnage",
+    "keywords": ["urgent", "click", "gift", "verify", "account"]
+  }
+]

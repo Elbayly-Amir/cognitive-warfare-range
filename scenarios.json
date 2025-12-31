@@ -1,0 +1,33 @@
+{
+  "scenarios": [
+    {
+      "name": "Campagne Phishing Bancaire",
+      "category": "PHISHING",
+      "weight": 0.3,
+      "templates": [
+        "URGENT: Votre compte {bank} a été bloqué. Vérifiez votre identité ici : {url}",
+        "Alerte sécurité : Une connexion suspecte a été détectée. Sécurisez votre accès sur {url}",
+        "Dernier rappel avant suspension de vos services bancaires. Connectez-vous : {url}"
+      ]
+    },
+    {
+      "name": "Désinformation Politique",
+      "category": "DISINFORMATION",
+      "weight": 0.4,
+      "templates": [
+        "Le gouvernement nous cache la vérité sur le projet {project_name}. Lisez les documents fuités : {url}",
+        "Scandale ! Le ministre a été vu avec des agents étrangers. Preuves ici : {url}",
+        "Ne croyez pas les médias officiels. La vraie vérité est sur {domain} #Truth #Reveil"
+      ]
+    },
+    {
+      "name": "Fuite de Données",
+      "category": "SECURITY_INCIDENT",
+      "weight": 0.2,
+      "templates": [
+        "HACKED! La base de données de {company} est en ligne. Téléchargez le dump ici : {url}",
+        "Je vends des accès admin pour {company}. Contactez-moi sur le darknet. Preuve : {url}"
+      ]
+    }
+  ]
+}
