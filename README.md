@@ -20,7 +20,7 @@ In the modern cyber landscape, Security Operations Centers (SOCs) are well-equip
     * **Semantic Layer:** Uses a local LLM (**Ollama/Mistral**) to generate unique, credible, and context-aware narratives (e.g., "Urgent bank alert", "Political scandal cover-up").
     * **Technical Layer:** Uses **Python (Faker)** to attach realistic technical indicators (Malicious IPs, Phishing Domains, File Hashes).
 * **STIX 2.1 Structured Data:** Unlike simple log generators, this tool creates a complex graph of objects: `Identity` (Bot) -> `related-to` -> `Note` (Content) -> `related-to` -> `Indicator` (Technical IOC).
-* **♾️ Autonomous Daemon:** Runs as a background service (Dockerized) simulating continuous activity with "human-like" pause intervals.
+* **Autonomous Daemon:** Runs as a background service (Dockerized) simulating continuous activity with "human-like" pause intervals.
 * **Live Monitoring:** Integrated directly with OpenCTI dashboards to visualize threat distribution and campaign intensity in real-time.
 * **Secure by Design:** Local execution (no data leakage), environment variable management, and strict separation of configuration vs. code.
 
@@ -48,7 +48,7 @@ In the modern cyber landscape, Security Operations Centers (SOCs) are well-equip
 
 1.  **Clone the repository**
     ```bash
-    git clone [https://github.com/your-repo/cognitive-warfare-range.git](https://github.com/your-repo/cognitive-warfare-range.git)
+    git clone https://github.com/Elbayly-Amir/cognitive-warfare-range.git
     cd cognitive-warfare-range
     ```
 
