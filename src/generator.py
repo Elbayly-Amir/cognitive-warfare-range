@@ -29,14 +29,15 @@ class ThreatGenerator:
             reputation_score=random.randint(0, 100)
         )
 
-    def _pick_scenario(self):
-        """Choisit un scénario dans la liste selon les poids"""
-        scenarios = self.config.get("scenarios", [])
-        if not scenarios:
+    def _pick_persona(self):
+        """Choisit un persona selon les poids (Probabilités)"""
+        personas = self.config.get("personas", [])
+        if not personas:
             return None
         
-        weights = [s.get("weight", 1.0) for s in scenarios]
-        return random.choices(scenarios, weights=weights, k=1)[0]
+        weights = [p.get("weight", 1.0) for p in personas]
+        
+        return random.choices(personas, weights=weights, k=1)[0]
 
     def _pick_persona(self):
         """Choisit un persona au hasard"""
@@ -54,7 +55,8 @@ class ThreatGenerator:
             persona = self._pick_persona()
             
             persona_desc = persona["description"] if persona else None
-
+            country_code = persona.get("origin_country", "Unknown") if persona else "Unknown"
+            
             if scenario and "ai_topic" in scenario:
                 base_content = self.llm.generate_content(
                     topic=scenario["ai_topic"], 
@@ -74,7 +76,8 @@ class ThreatGenerator:
                 author=self._generate_user(),
                 content=full_content,
                 created_at=self.fake.date_time_between(start_date="-1h", end_date="now"),
-                technical_ip=generated_ip
+                technical_ip=generated_ip,
+                origin_country=country_code
             )
             
             posts.append(post)
