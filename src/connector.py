@@ -43,6 +43,27 @@ class OpenCTIConnector:
             create_indicator=False
         )
 
+    def _process_campaign(self, campaign_name: str, author_id: str):
+        """Crée ou récupère une campagne et lie l'auteur"""
+        try:
+            campaign = self.api.campaign.create(
+                name=campaign_name,
+                description="Campagne de désinformation détectée par le simulateur.",
+                confidence=80,
+                createdBy=author_id 
+            )
+            
+            self.api.stix_core_relationship.create(
+                fromId=campaign["id"],
+                toId=author_id,
+                relationship_type="related-to",
+                description="Acteur participant à cette campagne"
+            )
+            return campaign
+        except Exception as e:
+            print(f"   [WARN] Erreur gestion Campagne '{campaign_name}': {e}")
+            return None
+
     def _process_labels(self, content: str, note_id: str) -> list:
         """Applique les labels"""
         detected_labels = self.label_manager.analyze_content(content)
@@ -119,6 +140,66 @@ class OpenCTIConnector:
             algo = "MD5" if len(value) == 32 else "SHA-256"
             return f"[file:hashes.'{algo}' = '{value}']", "File"
         return None, "Unknown"
+    
+    def _process_malware(self, malware_info: dict, author_id: str, note_id: str, campaign_id: str = None):
+        """Crée le malware, le hash, et lie tout le monde"""
+        if not malware_info:
+            return
+
+        try:
+            malware = self.api.malware.create(
+                name=malware_info["name"],
+                type=malware_info["type"].lower(),
+                description="Malware identifié lors de la simulation.",
+                is_family=False,
+                createdBy=author_id
+            )
+
+            hash_val = malware_info["hash"]
+            pattern = f"[file:hashes.'SHA-256' = '{hash_val}']"
+            
+            indicator = self.api.indicator.create(
+                name=hash_val,
+                description=f"Hash associé à {malware_info['name']}",
+                pattern_type="stix",
+                pattern=pattern,
+                x_opencti_main_observable_type="File",
+                score=90,
+                createdBy=author_id
+            )
+
+            self.api.stix_core_relationship.create(
+                fromId=indicator["id"],
+                toId=malware["id"],
+                relationship_type="indicates",
+                description="Ce hash est une signature de ce malware"
+            )
+
+            self.api.stix_core_relationship.create(
+                fromId=author_id,
+                toId=malware["id"],
+                relationship_type="related-to",
+                description="L'acteur diffuse ce malware"
+            )
+
+            self.api.stix_core_relationship.create(
+                fromId=note_id,
+                toId=malware["id"],
+                relationship_type="related-to"
+            )
+
+            if campaign_id:
+                 self.api.stix_core_relationship.create(
+                    fromId=campaign_id,
+                    toId=malware["id"],
+                    relationship_type="uses",
+                    description="Arsenal déployé durant l'opération"
+                )
+
+            print(f"Malware traité : {malware_info['name']}")
+
+        except Exception as e:
+            print(f"   [!] Erreur traitement Malware: {e}")
 
     def send_post(self, post: SocialMediaPost):
         print(f"[>>] Envoi du post de {post.author.pseudo}...")
@@ -142,6 +223,13 @@ class OpenCTIConnector:
                 except Exception:
                     pass
 
+            campaign_obj = None
+            campaign_id = None 
+
+            if post.campaign_name:
+                campaign_obj = self._process_campaign(post.campaign_name, author["id"])
+                if campaign_obj: campaign_id = campaign_obj["id"]
+                
             note = self.api.note.create(
                 abstract=f"Post sur {post.platform}",
                 content=post.content,
@@ -150,10 +238,21 @@ class OpenCTIConnector:
                 confidence=80
             )
 
+            if campaign_obj:
+                self.api.stix_core_relationship.create(
+                    fromId=note["id"],
+                    toId=campaign_obj["id"],
+                    relationship_type="related-to",
+                    description="Fait partie de la campagne"
+                )
+            
+            if post.malware_info:
+                self._process_malware(post.malware_info, author["id"], note["id"], campaign_id)
+
             self._process_labels(post.content, note["id"])
             self._process_indicators(post, note["id"], author["id"], location_id)
 
-            print(f"   [V] Succès ! Note {note['id']} traitée.")
+            print(f"   [V] Succès ! Note {note['id']} traitée (Campagne: {post.campaign_name}).")
             return note
 
         except Exception as e:

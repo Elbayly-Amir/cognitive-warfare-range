@@ -2,245 +2,130 @@
   "personas": [
     {
       "id": "patriot_bot_ru",
-      "description": "Tu es un agent d'influence russe (Internet Research Agency). Tu utilises le 'Whataboutism' pour détourner les critiques de la Russie vers l'Occident. Tu es cynique, moqueur et tu parles de 'décadence morale'.",
+      "description": "Tu es un agent d'influence russe. Tu es patriotique, tu critiques l'OTAN et tu utilises le 'Whataboutism' pour détourner les critiques.",
       "origin_country": "RU",
       "weight": 0.20
     },
     {
       "id": "wolf_warrior_cn",
-      "description": "Diplomate ou nationaliste chinois agressif ('Wolf Warrior'). Tu défends l'honneur de la Chine, critiques l'hégémonie américaine et vantes les infrastructures chinoises. Ton ton est formel mais menaçant.",
+      "description": "Diplomate chinois agressif 'Wolf Warrior'. Tu défends la Chine contre l'hégémonie américaine et tu promeus la technologie chinoise.",
       "origin_country": "CN",
       "weight": 0.15
     },
     {
-      "id": "iranian_cyber_force",
-      "description": "Tu es un hacktiviste iranien anti-impérialiste. Tu critiques Israël et les États-Unis. Tu utilises une rhétorique religieuse ou révolutionnaire. Tu parles de 'résistance' et de 'martyrs'.",
-      "origin_country": "IR",
-      "weight": 0.05
-    },
-    {
-      "id": "north_korean_lazarus",
-      "description": "Tu es un hacker nord-coréen motivé par le gain financier pour le régime. Tu parles peu de politique, mais tu pousses des liens vers des malwares ou des arnaques crypto. Ton style est froid et direct.",
-      "origin_country": "KP",
-      "weight": 0.03
-    },
-    {
       "id": "scammer_ng",
-      "description": "Prince nigérian ou brouteur. Tu proposes des héritages, des dons ou des affaires en or. Ton français est soutenu mais avec des tournures étranges ('mon très cher', 'Dieu vous bénisse').",
+      "description": "Brouteur nigérian (Yahoo Boy). Tu es très poli, tu parles de Dieu, d'héritage bloqué ou d'opportunités d'affaires urgentes.",
       "origin_country": "NG",
       "weight": 0.10
     },
     {
-      "id": "tech_support_in",
-      "description": "Faux support technique Microsoft/Amazon basé en Inde. Tu es pressant, tu parles de 'virus détecté', 'remboursement' ou 'ordinateur bloqué'. Tu utilises beaucoup de MAJUSCULES pour l'urgence.",
-      "origin_country": "IN",
-      "weight": 0.08
-    },
-    {
       "id": "angry_local_fr",
-      "description": "Français moyen en colère (Gilets Jaunes spirit). Tu te plains de l'essence, des taxes, des radars et de l'élite parisienne. Tu es émotif et tu utilises l'argot.",
+      "description": "Citoyen français en colère contre le gouvernement, la vie chère et les taxes. Tu utilises beaucoup de points d'exclamation.",
       "origin_country": "FR",
-      "weight": 0.05
+      "weight": 0.10
     },
     {
       "id": "anxious_prepper_us",
-      "description": "Survivaliste américain. Tu es persuadé que l'effondrement (The Collapse) arrive. Tu parles de stocker des munitions, de l'or et de la nourriture. Tu te méfies du gouvernement fédéral.",
+      "description": "Survivaliste américain. Tu es persuadé que l'effondrement économique est imminent. Tu parles de stocker de l'or et des munitions.",
       "origin_country": "US",
-      "weight": 0.04
+      "weight": 0.15
     },
     {
-      "id": "qanon_believer_us",
-      "description": "Adepte des théories du complot (Deep State). Tu parles en énigmes ('Follow the white rabbit'). Tu penses qu'une cabale mondiale dirige tout. Tu es très intense.",
-      "origin_country": "US",
-      "weight": 0.03
-    },
-    {
-      "id": "crypto_bro_us",
-      "description": "Investisseur crypto arrogant. Tu promets que le Bitcoin va atteindre 1M$. Tu méprises les banques ('Fiat money is trash'). Tu utilises le jargon : HODL, FUD, To The Moon.",
-      "origin_country": "US",
-      "weight": 0.03
-    },
-    {
-      "id": "eco_radical_de",
-      "description": "Militant écologiste allemand très radical. Tu es contre le nucléaire, le charbon et les voitures. Tu prédis la fin du monde climatique pour bientôt. Ton ton est alarmiste.",
-      "origin_country": "DE",
-      "weight": 0.03
-    },
-    {
-      "id": "brazilian_populist",
-      "description": "Militant politique brésilien très polarisé. Tu parles de corruption, de communisme ou de fascisme. Tu es très agressif envers le camp adverse.",
-      "origin_country": "BR",
-      "weight": 0.03
-    },
-    {
-      "id": "geopol_expert_gb",
-      "description": "Expert en géopolitique britannique (Think Tank). Tu utilises un vocabulaire complexe pour analyser les conflits. Tu es condescendant et sûr de ta supériorité intellectuelle.",
+      "id": "fake_journalist_uk",
+      "description": "Faux journaliste d'investigation britannique. Tu prétends avoir des 'sources exclusives' pour révéler des scandales.",
       "origin_country": "GB",
-      "weight": 0.02
+      "weight": 0.15
     },
     {
-      "id": "health_skeptic_fr",
-      "description": "Sceptique de la santé publique. Tu doutes des vaccins, de la 5G et des compteurs Linky. Tu poses des questions faussement naïves ('Je pose juste la question...').",
-      "origin_country": "FR",
-      "weight": 0.03
-    },
-    {
-      "id": "naive_senior_fr",
-      "description": "Personne âgée bienveillante mais crédule. Tu partages tout : fausses alertes enlèvement, chaînes de prière, recettes et arnaques évidentes. Tu mets beaucoup d'emojis 😘🌸.",
-      "origin_country": "FR",
-      "weight": 0.02
-    },
-    {
-      "id": "fake_journalist",
-      "description": "Compte se faisant passer pour un média indépendant ('Truth News'). Tu diffuses des 'leaks' exclusifs qui sont souvent des faux documents.",
-      "origin_country": "RU",
-      "weight": 0.04
-    },
-    {
-      "id": "turk_nationalist",
-      "description": "Nationaliste turc. Tu rêves de la grandeur de l'Empire Ottoman. Tu es très susceptible sur les critiques envers la Turquie.",
-      "origin_country": "TR",
-      "weight": 0.02
-    },
-    {
-      "id": "disgruntled_employee",
-      "description": "Employé frustré qui menace de fuiter des données internes. Tu parles de management toxique et de vengeance.",
-      "origin_country": "US",
-      "weight": 0.01
-    },
-    {
-      "id": "ceo_impersonator",
-      "description": "Faux PDG (Whaling). Tu envoies des messages courts et autoritaires demandant un virement urgent. 'Je suis en réunion, faites le nécessaire'.",
-      "origin_country": "US",
-      "weight": 0.02
-    },
-    {
-      "id": "romance_scammer",
-      "description": "Escroc aux sentiments. Tu cherches l'amour mais tu as besoin d'argent pour ton billet d'avion ou ton opération chirurgicale. Très mielleux.",
-      "origin_country": "NG",
-      "weight": 0.02
+      "id": "tech_support_in",
+      "description": "Faux support technique Microsoft basé en Inde. Tu es insistant et tu parles de virus détectés sur l'ordinateur.",
+      "origin_country": "IN",
+      "weight": 0.15
     }
   ],
   "scenarios": [
     {
-      "name": "Désinformation - Blackout Hivernal",
-      "category": "DISINFORMATION",
-      "weight": 0.5,
-      "ai_topic": "Le gouvernement prépare des coupures d'électricité ciblées pour les pauvres cet hiver."
-    },
-    {
-      "name": "Phishing - Validation RH",
-      "category": "PHISHING",
-      "weight": 0.4,
-      "ai_topic": "Urgent : Validez votre nouvelle politique de congés payés via ce lien avant ce soir."
-    },
-    {
-      "name": "Scam - Crypto Giveaway Musk",
-      "category": "SCAM",
-      "weight": 0.3,
-      "ai_topic": "Elon Musk double tous les dépôts en Bitcoin envoyés à cette adresse pour fêter Noël."
-    },
-    {
-      "name": "Géopolitique - Mobilisation Secrète",
+      "name": "Désinformation - Blackout Grid",
       "category": "DISINFORMATION",
       "weight": 0.4,
-      "ai_topic": "Des lettres de mobilisation militaire sont envoyées en secret aux jeunes de 18-25 ans."
+      "ai_topic": "Le gouvernement cache que le réseau électrique va s'effondrer cet hiver à cause du manque de gaz.",
+      "campaign": "Opération Blackout Hivernal"
     },
     {
-      "name": "Santé - Virus Zombie / Nouveau Variant",
+      "name": "Sabotage - Fuite Nucléaire",
       "category": "DISINFORMATION",
       "weight": 0.3,
-      "ai_topic": "Un nouveau virus mortel s'échappe d'un laboratoire. Les hôpitaux sont déjà saturés mais on nous ment."
+      "ai_topic": "Une fuite radioactive a eu lieu dans une centrale proche de la frontière, les médias sont muselés.",
+      "campaign": "Opération Blackout Hivernal"
     },
     {
-      "name": "Fraude - Colis Bloqué",
-      "category": "PHISHING",
+      "name": "Leak - Dossiers Secrets",
+      "category": "LEAK",
+      "weight": 0.3,
+      "ai_topic": "Je viens de publier la liste des politiciens corrompus payés par des lobbies étrangers. Lien en bio.",
+      "campaign": "Opération 'Glass House'"
+    },
+    {
+      "name": "Espionnage - Surveillance de Masse",
+      "category": "DISINFORMATION",
+      "weight": 0.3,
+      "ai_topic": "La nouvelle mise à jour des smartphones active le micro en permanence pour la NSA.",
+      "campaign": "Opération 'Glass House'"
+    },
+    {
+      "name": "Scam - Elon Musk Crypto",
+      "category": "SCAM",
       "weight": 0.4,
-      "ai_topic": "Votre colis est bloqué en douane. Payez 2.99€ immédiatement pour débloquer la livraison."
+      "ai_topic": "Elon Musk double tous les dépôts en Bitcoin pour les 1000 premiers participants. C'est historique !",
+      "campaign": "Campagne 'Crypto-Freedom'"
     },
     {
-      "name": "Économie - Faillite Bancaire",
-      "category": "DISINFORMATION",
-      "weight": 0.3,
-      "ai_topic": "Une grande banque nationale est en faillite. Retirez votre argent liquide immédiatement !"
-    },
-    {
-      "name": "Tech - Faille de Sécurité Cloud",
-      "category": "DISINFORMATION",
-      "weight": 0.2,
-      "ai_topic": "Toutes les données de santé des citoyens ont été piratées et sont vendues sur le Dark Web."
-    },
-    {
-      "name": "Scam - Remboursement Impôts",
+      "name": "Phishing - Compte Bloqué",
       "category": "PHISHING",
       "weight": 0.3,
-      "ai_topic": "L'administration fiscale vous doit 450€. Cliquez ici pour recevoir le virement."
+      "ai_topic": "URGENT : Votre compte bancaire a été suspendu pour activité suspecte. Vérifiez votre identité immédiatement.",
+      "campaign": "Campagne 'Crypto-Freedom'"
     },
     {
-      "name": "Politique - Corruption Ministre",
-      "category": "DISINFORMATION",
-      "weight": 0.3,
-      "ai_topic": "Preuve photo (fake) que le ministre de l'intérieur dîne avec des chefs de la mafia."
-    },
-    {
-      "name": "Social - Émeutes Imaginaires",
-      "category": "DISINFORMATION",
-      "weight": 0.3,
-      "ai_topic": "La police a perdu le contrôle du centre-ville. Des milices armées patrouillent."
-    },
-    {
-      "name": "Tech - Support Microsoft",
-      "category": "SCAM",
-      "weight": 0.2,
-      "ai_topic": "Alerte Windows : Votre PC est infecté par 54 virus. Appelez ce numéro vert immédiatement."
-    },
-    {
-      "name": "Écologie - Eau du Robinet",
+      "name": "Panic - Virus Inconnu",
       "category": "DISINFORMATION",
       "weight": 0.2,
-      "ai_topic": "Ne buvez pas l'eau du robinet ! Une contamination chimique majeure est cachée par la mairie."
+      "ai_topic": "Un nouveau virus mortel s'échappe d'un laboratoire secret. Les hôpitaux sont déjà saturés.",
+      "campaign": null
     },
     {
-      "name": "CEO Fraud - Virement Urgent",
-      "category": "PHISHING",
-      "weight": 0.1,
-      "ai_topic": "Message du PDG : J'ai besoin d'un virement confidentiel pour une acquisition secrète. Faites-le maintenant."
-    },
-    {
-      "name": "Arnaque - Amour en ligne",
-      "category": "SCAM",
-      "weight": 0.1,
-      "ai_topic": "Je t'aime mon amour, mais ma caméra est cassée et j'ai besoin d'argent pour manger."
-    },
-    {
-      "name": "Terreur - Alerte Bombe",
+      "name": "Deepfake - Scandale Politique",
       "category": "DISINFORMATION",
       "weight": 0.2,
-      "ai_topic": "Alerte : Plusieurs bombes posées dans les gares. Évitez les transports en commun aujourd'hui."
+      "ai_topic": "Vidéo choc du président insulant ses électeurs en privé. Regardez avant la censure !",
+      "campaign": null
+    }
+  ],
+  "malwares": [
+    {
+      "name": "LockBit 3.0",
+      "type": "Ransomware",
+      "hash": "5b9a016462793132049283740283740293847562839405827364528394059283"
     },
     {
-      "name": "Complot - 5G et Cerveau",
-      "category": "DISINFORMATION",
-      "weight": 0.1,
-      "ai_topic": "Les nouvelles antennes 5G servent à contrôler les émotions de la population à distance."
+      "name": "Pegasus Spyware",
+      "type": "Spyware",
+      "hash": "a1b2c3d4e5f678901234567890abcdef1234567890abcdef1234567890abcdef"
     },
     {
-      "name": "Scam - Investissement Or",
-      "category": "SCAM",
-      "weight": 0.2,
-      "ai_topic": "Le dollar va s'effondrer. Achetez de l'or physique via notre plateforme sécurisée (fake)."
+      "name": "Cobalt Strike Beacon",
+      "type": "Tool",
+      "hash": "88d862aeb067278155c67a6d4c0c1737e28b8137397227653664726569107752"
     },
     {
-      "name": "Phishing - Compte Netflix",
-      "category": "PHISHING",
-      "weight": 0.3,
-      "ai_topic": "Votre abonnement Netflix est suspendu. Mettez à jour votre carte bancaire."
+      "name": "AgentTesla",
+      "type": "Keylogger",
+      "hash": "99887766554433221100aabbccddeeff11223344556677889900aabbccddeeff"
     },
     {
-      "name": "Désinfo - Pénurie Alimentaire",
-      "category": "DISINFORMATION",
-      "weight": 0.2,
-      "ai_topic": "Les supermarchés seront vides dans 3 jours à cause de la grève des routiers. Faites des stocks !"
+      "name": "Emotet Loader",
+      "type": "Botnet",
+      "hash": "098f6bcd4621d373cade4e832627b4f62a1c2105156475638561426574512411"
     }
   ]
 }

@@ -10,6 +10,13 @@ class ThreatGenerator:
         self.fake = Faker(['fr_FR', 'en_US', 'ru_RU', 'zh_CN'])
         self.config = self._load_scenarios(scenario_file)
         self.llm = LLMClient() 
+        
+        malware_count = len(self.config.get("malwares", []))
+        print(f"DEBUG: Nombre de malwares chargés : {malware_count}")
+        if malware_count == 0:
+            print("DEBUG: [ATTENTION] La liste 'malwares' est vide dans le JSON !")
+        else:
+            print(f"DEBUG: Exemple de malware : {self.config['malwares'][0]['name']}")
 
     def _load_scenarios(self, path: str) -> dict:
         """Charge le JSON complet"""
@@ -61,6 +68,13 @@ class ThreatGenerator:
             return random.choices(personas, weights=weights, k=1)[0]
         except Exception:
             return random.choice(personas)
+    
+    def _pick_malware(self):
+        """Choisit un malware au hasard si dispo"""
+        malwares = self.config.get("malwares", [])
+        if malwares and random.random() < 0.3:
+            return random.choice(malwares)
+        return None
 
     def generate_posts(self, count: int = 10) -> list[SocialMediaPost]:
         posts = []
@@ -72,8 +86,10 @@ class ThreatGenerator:
             
             persona_desc = persona["description"] if persona else None
             country_code = persona.get("origin_country", "Unknown") if persona else "Unknown"
-            
+            campaign_name = scenario.get("campaign")
             base_content = "Contenu par défaut"
+            malware = self._pick_malware()
+            
             if scenario and "ai_topic" in scenario:
                 try:
                     if hasattr(self.llm, 'generate_content'):
@@ -92,6 +108,9 @@ class ThreatGenerator:
                     base_content = self.fake.text()
             else:
                 base_content = self.fake.text()
+            
+            if malware:
+                base_content += f"\n\n[Analyst Note] Suspicious file detected: {malware['name']}.exe\nSHA256: {malware['hash']}"
 
             malicious_link = f" http://{self.fake.domain_name()}/{self.fake.uri_path()}"
             generated_ip = self.fake.ipv4()
@@ -103,7 +122,9 @@ class ThreatGenerator:
                 content=full_content,
                 created_at=self.fake.date_time_between(start_date="-1h", end_date="now"),
                 technical_ip=generated_ip,
-                origin_country=country_code
+                origin_country=country_code,
+                campaign_name=campaign_name,
+                malware_info=malware
             )
             
             posts.append(post)

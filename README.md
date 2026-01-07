@@ -18,10 +18,15 @@ In the modern cyber landscape, Security Operations Centers (SOCs) are well-equip
 
 * **Hybrid Generation Engine:**
     * **Semantic Layer:** Uses a local LLM (**Ollama/Mistral**) to generate unique, credible, and context-aware narratives (e.g., "Urgent bank alert", "Political scandal cover-up").
-    * **Technical Layer:** Uses **Python (Faker)** to attach realistic technical indicators (Malicious IPs, Phishing Domains, File Hashes).
-* **STIX 2.1 Structured Data:** Unlike simple log generators, this tool creates a complex graph of objects: `Identity` (Bot) -> `related-to` -> `Note` (Content) -> `related-to` -> `Indicator` (Technical IOC).
+    * **Technical Layer:** Uses **Python (Faker)** to attach realistic technical indicators (Malicious IPs, Phishing Domains).
+* **Advanced Campaign Orchestration:**
+    * **Campaign Management:** Messages are not isolated but grouped into coherent STIX 2.1 `Campaign` objects (e.g., "Operation Blackout"), allowing analysts to track strategic movements.
+    * **Attribution:** Automatically links simulated Bots (`Identity`) to Campaigns and Indicators.
+* **Cyber Arsenal Simulation:**
+    * **Malware Injection:** The engine randomly injects weaponized payloads (Ransomware, Spyware) into social media posts.
+    * **STIX Patterning:** Creates the full kill-chain graph: `Threat Actor` -> `uses` -> `Malware` -> `indicated-by` -> `File Hash (SHA256)`.
 * **Autonomous Daemon:** Runs as a background service (Dockerized) simulating continuous activity with "human-like" pause intervals.
-* **Live Monitoring:** Integrated directly with OpenCTI dashboards to visualize threat distribution and campaign intensity in real-time.
+* **Live Monitoring:** Integrated directly with OpenCTI dashboards. Provides clear visualization via pie charts (distribution of narratives) and knowledge graphs to analyze correlations.
 * **Secure by Design:** Local execution (no data leakage), environment variable management, and strict separation of configuration vs. code.
 
 ---
@@ -42,22 +47,30 @@ In the modern cyber landscape, Security Operations Centers (SOCs) are well-equip
 ### Prerequisites
 * **Docker** & **Docker Compose**
 * **Ollama** installed on the host machine (Mac/Linux/Windows)
-* **Python 3.13** (optional, for local dev)
 
 ### Quick Start
 
 1.  **Clone the repository**
     ```bash
-    git clone https://github.com/Elbayly-Amir/cognitive-warfare-range.git
+    git clone [https://github.com/Elbayly-Amir/cognitive-warfare-range.git](https://github.com/Elbayly-Amir/cognitive-warfare-range.git)
     cd cognitive-warfare-range
     ```
 
 2.  **Configure Environment**
-    Duplicate the sample file and set your credentials.
+    Duplicate the sample file.
     ```bash
     cp .env.sample .env
-    # Edit .env if you changed OpenCTI default credentials
     ```
+    
+    **Important:** You must generate a unique ID for the connector.
+    Run the following command in your terminal:
+    ```bash
+    uuidgen
+    ```
+    Copy the output (e.g., `550e8400-e29b...`) and replace `CHANGEME_UUID` in your `.env` file.
+    *Note: If you do not have `uuidgen`, you can use any online UUID generator.*
+
+    Edit `OPENCTI_TOKEN` in the `.env` file with your OpenCTI admin token.
 
 3.  **Start the AI Model (Local Host)**
     Ensure Ollama is running and has the model pulled.
@@ -78,25 +91,33 @@ In the modern cyber landscape, Security Operations Centers (SOCs) are well-equip
 
 ## Scenario Configuration
 
-The simulator is data-driven. You can control the narratives by editing `scenarios.json`.
-The engine uses the `ai_topic` to prompt the LLM and the `category` to tag the data.
+The simulator is data-driven. You can control narratives, personas, and available malware by editing `scenarios.json`.
 
 **Example Configuration:**
 ```json
 {
+  "personas": [
+    {
+      "id": "patriot_bot_ru",
+      "description": "Influence agent spreading political propaganda.",
+      "origin_country": "RU",
+      "weight": 0.5
+    }
+  ],
   "scenarios": [
     {
-      "name": "Banking Phishing Campaign",
-      "category": "PHISHING",
-      "weight": 0.5,
-      "ai_topic": "Urgent account suspension notice due to suspicious activity",
-      "templates": [] 
-    },
-    {
-      "name": "Political Disinformation",
+      "name": "Energy Grid Disinformation",
       "category": "DISINFORMATION",
-      "weight": 0.5,
-      "ai_topic": "Government hiding a sanitary scandal regarding tap water"
+      "weight": 0.4,
+      "ai_topic": "Government hiding massive blackouts for next winter.",
+      "campaign": "Operation Winter Blackout"
+    }
+  ],
+  "malwares": [
+    {
+      "name": "WannaCry 2.0",
+      "type": "Ransomware",
+      "hash": "24d004a104d45d21699126d5d932172a80f074d18646b241d112348392749001"
     }
   ]
 }

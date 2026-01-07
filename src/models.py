@@ -24,6 +24,8 @@ class SocialMediaPost(BaseModel):
     geolocation_lon: Optional[float] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
     author: SocialMediaUser
+    campaign_name: Optional[str] = Field(None, description="Nom de la campagne coordonnée (ex: Opération Blackout)")
+    malware_info: Optional[dict] = Field(None, description="Ex: {'name': 'Emotet', 'hash': 'a1b2...'}")
 
     @field_validator('content')
     def prevent_xss_attempts(cls, v):
